@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.os.Handler
+import java.security.KeyStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +13,8 @@ class MainActivity : AppCompatActivity() {
     val handler = Handler()
     // 繰り返し代入するためvarを使う
     var timeValue = 0
+    // startが2回押された時にstopになるようにするための判別変数
+    var startOrStop =false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         //as TextView という記述だとタイムパラメーターの推論ができないから
         //型を明示する 変数の後に型を書くやり方がいい
         val timeText:TextView = findViewById(R.id.timeText)
-        val startButton:Button = findViewById(R.id.start)
-        val stopButton:Button = findViewById(R.id.stop)
+        val startandstopButton:Button = findViewById(R.id.startandstop)
+        //val stopButton:Button = findViewById(R.id.stop)
         val resetButton:Button = findViewById(R.id.reset)
 
         //1秒ごとに処理を実行
@@ -37,15 +40,23 @@ class MainActivity : AppCompatActivity() {
                 handler.postDelayed(this, 1000)
             }
         }
-        // start
-        startButton.setOnClickListener {
-            handler.post(runnable)
+
+        // start and stop
+        startandstopButton.setOnClickListener {
+            startOrStop = if(startOrStop==false) {
+                handler.post(runnable)
+                true
+            }
+            else {
+                handler.removeCallbacks(runnable)
+                false
+            }
         }
 
         // stop
-        stopButton.setOnClickListener {
-            handler.removeCallbacks(runnable)
-        }
+//        stopButton.setOnClickListener {
+//            handler.removeCallbacks(runnable)
+//        }
 
 
         // reset
