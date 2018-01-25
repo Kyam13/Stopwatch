@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
     val handler = Handler()
     // 繰り返し代入するためvarを使う
     var timeValue = 0
-    // startが2回押された時にstopになるようにするための判別変数
-    var startOrStop =false
+    // startが偶数回押された時にstopになるようにするための判別変数
+    var startchangeStop =false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity() {
         val startandstopButton:Button = findViewById(R.id.startandstop)
         //val stopButton:Button = findViewById(R.id.stop)
         val resetButton:Button = findViewById(R.id.reset)
+        val hourButton:Button = findViewById(R.id.hour)
+        val minuteButton:Button = findViewById(R.id.min)
+        val secondButton:Button = findViewById(R.id.sec)
+
 
         //1秒ごとに処理を実行
         val runnable = object : Runnable{
@@ -43,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         // start and stop
         startandstopButton.setOnClickListener {
-            startOrStop = if(startOrStop==false) {
+            startchangeStop = if(startchangeStop==false) {
                 handler.post(runnable)
                 true
             }
@@ -57,8 +61,6 @@ class MainActivity : AppCompatActivity() {
 //        stopButton.setOnClickListener {
 //            handler.removeCallbacks(runnable)
 //        }
-
-
         // reset
         resetButton.setOnClickListener {
             handler.removeCallbacks(runnable)
@@ -68,7 +70,33 @@ class MainActivity : AppCompatActivity() {
                 timeText.text = it
             }
         }
-
+        //hour
+        hourButton.setOnClickListener{
+            timeValue=timeValue+3600
+            timeToText(timeValue)?.let {
+                // timeToText(timeValue)の値がlet内ではitとして使える
+                timeText.text = it
+            }
+            handler.postDelayed(this, 1000)
+        }
+        //minute
+        minuteButton.setOnClickListener{
+            timeValue=timeValue+60
+            timeToText(timeValue)?.let {
+                // timeToText(timeValue)の値がlet内ではitとして使える
+                timeText.text = it
+            }
+            handler.postDelayed(this, 1000)
+        }
+        //second
+        secondButton.setOnClickListener{
+            timeValue=timeValue+1
+            timeToText(timeValue)?.let {
+                // timeToText(timeValue)の値がlet内ではitとして使える
+                timeText.text = it
+            }
+            handler.postDelayed(this, 1000)
+        }
     }
     // 数値を00:00:00形式の文字列に変換する関数
     // 引数timeにはデフォルト値0を設定、返却する型はnullableなString?型
